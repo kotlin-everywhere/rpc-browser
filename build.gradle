@@ -1,22 +1,25 @@
 buildscript {
-   ext.kotlin_version = '1.0.1-2'
+    ext.kotlin_version = '1.0.1-2'
 
-   repositories {
-     mavenCentral()
-   }
+    repositories {
+        mavenCentral()
+    }
 
-   dependencies {
-     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-   }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
 apply plugin: 'kotlin2js'
-compileKotlin2Js.kotlinOptions.outputFile = "$buildDir/rpc-browser.js"
+compileKotlin2Js.kotlinOptions.outputFile = "$buildDir/js/rpc-browser_main.js"
+compileKotlin2Js.kotlinOptions.sourceMap = true
+compileTestKotlin2Js.kotlinOptions.outputFile = "$buildDir/js/rpc-browser_test.js"
+compileTestKotlin2Js.kotlinOptions.sourceMap = true
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  compile "org.jetbrains.kotlin:kotlin-js-library:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-js-library:$kotlin_version"
 }

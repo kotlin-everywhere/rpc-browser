@@ -16,10 +16,31 @@ compileKotlin2Js.kotlinOptions.sourceMap = true
 compileTestKotlin2Js.kotlinOptions.outputFile = "$buildDir/js/rpc-browser_test.js"
 compileTestKotlin2Js.kotlinOptions.sourceMap = true
 
+sourceSets.test.kotlin.srcDirs += 'src/main/kotlin'
+
+apply plugin: 'maven'
+
+group = 'com.github.kotlin-everywhere'
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-js-library:$kotlin_version"
+}
+
+
+jar {
+    dependsOn compileKotlin2Js
+    from ("$buildDir/js/rpc-browser_main.js", "$buildDir/js/rpc-browser_main.meta.js")
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
 }

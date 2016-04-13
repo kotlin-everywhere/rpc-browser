@@ -1,22 +1,23 @@
 package com.github.kotlin_everywhere.rpc
 
-import com.github.kotlin_everywhere.rpc.fetch as _fetch
+import org.w3c.fetch.Response
 
-class Method<T>(private val remote: Remote, url: String) {
+class Endpoint<T>(private val remote: Remote, url: String) {
     private val _url = url
 
     val url: String
         get() = remote.baseUri + _url
 
     fun fetch(): Promise<T> {
-        return Promise.resolve(_fetch(url)).then<T> { it.json() }
+        val body: (Response) -> Promise<T> = { it.json() }
+        return fetch(url).then(body)
     }
 }
 
 abstract class Remote {
     lateinit var baseUri: String
 
-    fun <T> get(url: String): Method<T> {
-        return Method(this, url)
+    fun <T> get(url: String): Endpoint<T> {
+        return Endpoint(this, url)
     }
 }

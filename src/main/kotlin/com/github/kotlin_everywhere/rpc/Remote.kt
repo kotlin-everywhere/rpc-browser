@@ -1,6 +1,7 @@
 package com.github.kotlin_everywhere.rpc
 
 import org.w3c.fetch.Response
+import kotlin.browser.window
 
 class Endpoint<T>(private val remote: Remote, url: String) {
     private val _url = url
@@ -10,7 +11,7 @@ class Endpoint<T>(private val remote: Remote, url: String) {
 
     fun fetch(): Promise<T> {
         val body: (Response) -> Promise<T> = { it.json() }
-        return fetch(url).then(body)
+        return Promise.resolve(window.fetch(url) as Promise<Response>).then(body)
     }
 }
 

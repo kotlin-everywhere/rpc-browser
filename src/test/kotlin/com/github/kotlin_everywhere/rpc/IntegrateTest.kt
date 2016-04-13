@@ -15,16 +15,15 @@ class IntegrateTest {
             val index = get<Index>("/")
 
         }
-        remote.baseUri = "http://www.example.com/api/v2"
+        remote.baseUri = "http://localhost:3333"
 
         // test url building
-        assertEquals("http://www.example.com/api/v2/", remote.index.url)
+        assertEquals("http://localhost:3333/", remote.index.url)
 
         // test get method
         remote.index
                 .fetch()
                 .then { index -> assertEquals("1.0.0", index.version) }
-                .mockFetch("""{"version": "1.0.0"}""")
                 .assertAsync()
 
         // test post method

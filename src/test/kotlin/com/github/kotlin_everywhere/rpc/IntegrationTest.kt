@@ -2,6 +2,7 @@ package com.github.kotlin_everywhere.rpc
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 interface Index {
@@ -32,6 +33,7 @@ class IntegrationTest {
             val index = get<Index>("/")
             val echo = get<Echo>("/echo").with<EchoParam>()
             var add = post<Add>("/add").with<AddParam>()
+            var postOnly = post<Boolean>("/post-only")
         }
         remote.baseUri = "http://localhost:3333"
 
@@ -52,7 +54,13 @@ class IntegrationTest {
                 .then { echo -> assertEquals("hello, world", echo.message) }
                 .assertAsync()
 
-        // test post method
+        // test post method without param
+        remote.postOnly
+                .fetch()
+                .then { boolean -> assertTrue(boolean) }
+                .assertAsync()
+
+        // test post method with param
         remote.add
                 .fetch { value1 = 1; value2 = 2 }
                 .then { add -> assertEquals(3, add.result) }

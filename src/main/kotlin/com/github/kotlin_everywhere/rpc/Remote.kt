@@ -18,7 +18,10 @@ abstract class BaseEndpoint(protected val remote: Remote, url: String, protected
 class Endpoint<T>(remote: Remote, url: String, method: Method) : BaseEndpoint(remote, url, method) {
     fun fetch(): Promise<T> {
         val body: (Response) -> Promise<T> = { it.json() }
-        return Promise.resolve(window.fetch(url) as Promise<Response>).then(body)
+        val requestInit = jsObject<RequestInit> {
+            method = this@Endpoint.method.name
+        }
+        return Promise.resolve(window.fetch(url, requestInit) as Promise<Response>).then(body)
     }
 
     fun <P : Any> with(): EndpointWithParam<T, P> {

@@ -16,6 +16,15 @@ interface EchoParam {
     var message: String
 }
 
+interface Add {
+    val result: Int
+}
+
+interface AddParam {
+    val op1: Int
+    val op2: Int
+}
+
 fun <T> jsObject(body: (T.() -> Unit)? = null): T {
     val obj: T = js("({})")
     if (body != null) {
@@ -30,6 +39,7 @@ class IntegrateTest {
         val remote = object : Remote() {
             val index = get<Index>("/")
             val echo = get<Echo>("/echo").with<EchoParam>()
+            var add = post<Add>("/add").with<AddParam>()
         }
         remote.baseUri = "http://localhost:3333"
 

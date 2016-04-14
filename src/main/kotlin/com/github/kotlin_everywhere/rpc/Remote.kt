@@ -3,6 +3,7 @@ package com.github.kotlin_everywhere.rpc
 import org.w3c.fetch.RequestInit
 import org.w3c.fetch.Response
 import kotlin.browser.window
+import com.github.kotlin_everywhere.JavaScript.Promise
 
 enum class Method {
     GET, POST

@@ -24,10 +24,12 @@ group = 'com.github.kotlin-everywhere'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-js-library:$kotlin_version"
+    compile 'com.github.kotlin-everywhere:JavaScript.kt:b1fffdcf06'
 }
 
 

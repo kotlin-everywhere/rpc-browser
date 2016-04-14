@@ -1,5 +1,6 @@
 package com.github.kotlin_everywhere.rpc
 
+import com.github.kotlin_everywhere.JavaScript.assertAsync
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

@@ -1,5 +1,6 @@
 package com.github.kotlin_everywhere.rpc
 
+import org.w3c.fetch.RequestInit
 import org.w3c.fetch.Response
 import kotlin.browser.window
 
@@ -29,10 +30,22 @@ class Endpoint<T>(remote: Remote, url: String, method: Method) : BaseEndpoint(re
 private fun encodeURIComponent(string: String): String
 
 class EndpointWithParam<R, P : Any>(remote: Remote, url: String, method: Method) : BaseEndpoint(remote, url, method) {
+    private val responseToJson: (Response) -> Promise<R> = { it.json() }
+
     fun fetch(param: P): Promise<R> {
-        val body: (Response) -> Promise<R> = { it.json() }
-        val url = "${this.url}?data=${encodeURIComponent(JSON.stringify(param))}"
-        return Promise.resolve(window.fetch(url) as Promise<Response>).then(body)
+        val url = this.url + if (method == Method.GET) "?data=${encodeURIComponent(JSON.stringify(param))}" else ""
+        val requestInit = jsObject<RequestInit> {
+            method = this@EndpointWithParam.method.name
+            headers = json("Content-Type" to "application/json")
+            if (this@EndpointWithParam.method !in listOf(Method.GET)) {
+                this.body = JSON.stringify(param)
+            }
+        }
+        return Promise.resolve(window.fetch(url, requestInit) as Promise<Response>).then(responseToJson)
+    }
+
+    fun fetch(body: P.() -> Unit): Promise<R> {
+        return fetch(jsObject(body))
     }
 }
 
@@ -46,4 +59,12 @@ abstract class Remote {
     fun <T> post(url: String): Endpoint<T> {
         return Endpoint(this, url, Method.POST)
     }
+}
+
+fun <T> jsObject(body: (T.() -> Unit)? = null): T {
+    val obj: T = js("({})")
+    if (body != null) {
+        obj.body()
+    }
+    return obj
 }

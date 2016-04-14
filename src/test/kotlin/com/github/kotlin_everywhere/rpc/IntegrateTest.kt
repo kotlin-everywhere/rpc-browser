@@ -21,16 +21,8 @@ interface Add {
 }
 
 interface AddParam {
-    val op1: Int
-    val op2: Int
-}
-
-fun <T> jsObject(body: (T.() -> Unit)? = null): T {
-    val obj: T = js("({})")
-    if (body != null) {
-        obj.body()
-    }
-    return obj
+    var value1: Int
+    var value2: Int
 }
 
 class IntegrateTest {
@@ -56,10 +48,14 @@ class IntegrateTest {
 
         // test get method with param
         remote.echo
-                .fetch(jsObject<EchoParam> { message = "hello, world" })
+                .fetch { message = "hello, world" }
                 .then { echo -> assertEquals("hello, world", echo.message) }
                 .assertAsync()
 
         // test post method
+        remote.add
+                .fetch { value1 = 1; value2 = 2 }
+                .then { add -> assertEquals(3, add.result) }
+                .assertAsync()
     }
 }

@@ -25,7 +25,7 @@ interface AddParam {
     var value2: Int
 }
 
-class IntegrateTest {
+class IntegrationTest {
     @Test
     fun testIntegrate() {
         val remote = object : Remote() {

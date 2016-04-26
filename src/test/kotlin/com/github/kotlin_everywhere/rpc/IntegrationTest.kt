@@ -35,6 +35,11 @@ class IntegrationTest {
             val echo = get<Echo>("/echo").with<EchoParam>()
             var add = post<Add>("/add").with<AddParam>()
             var postOnly = post<Boolean>("/post-only")
+
+            val sameGet = get<String>("/same")
+            val samePost = post<String>("/same")
+            val samePut = put<String>("/same")
+            val sameDelete = delete<String>("/same")
         }
         remote.baseUri = "http://localhost:3333"
 
@@ -66,5 +71,11 @@ class IntegrationTest {
                 .fetch { value1 = 1; value2 = 2 }
                 .then { add -> assertEquals(3, add.result) }
                 .assertAsync()
+
+        // test handle request method
+        remote.sameGet.fetch().then { method -> assertEquals("GET", method) }.assertAsync()
+        remote.samePost.fetch().then { method -> assertEquals("POST", method) }.assertAsync()
+        remote.samePut.fetch().then { method -> assertEquals("PUT", method) }.assertAsync()
+        remote.sameDelete.fetch().then { method -> assertEquals("DELETE", method) }.assertAsync()
     }
 }

@@ -6,7 +6,7 @@ import org.w3c.fetch.Response
 import kotlin.browser.window
 
 enum class Method {
-    GET, POST
+    GET, POST, PUT, DELETE
 }
 
 abstract class BaseEndpoint(protected val remote: Remote, url: String, protected val method: Method) {
@@ -63,6 +63,14 @@ fun <T> Remote.get(url: String): Endpoint<T> {
 
 fun <T> Remote.post(url: String): Endpoint<T> {
     return Endpoint(this, url, Method.POST)
+}
+
+fun <T> Remote.put(url: String): Endpoint<T> {
+    return Endpoint(this, url, Method.PUT)
+}
+
+fun <T> Remote.delete(url: String): Endpoint<T> {
+    return Endpoint(this, url, Method.DELETE)
 }
 
 fun <T> jsObject(body: (T.() -> Unit)? = null): T {

@@ -26,6 +26,27 @@ server.post('/post-only', function (req, res, next) {
     next()
 });
 
+server.get("/same", function (req, res, next) {
+    res.send("GET");
+    next()
+});
+
+server.post("/same", function (req, res, next) {
+    res.send("POST");
+    next()
+});
+
+server.put("/same", function (req, res, next) {
+    res.send("PUT");
+    next()
+});
+
+server.del("/same", function (req, res, next) {
+    res.send("DELETE");
+    next()
+});
+
+
 server.listen(3333, function () {
     console.log('%s listening at %s', server.name, server.url);
 });

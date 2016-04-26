@@ -1,9 +1,9 @@
 package com.github.kotlin_everywhere.rpc
 
+import com.github.kotlin_everywhere.JavaScript.Promise
 import org.w3c.fetch.RequestInit
 import org.w3c.fetch.Response
 import kotlin.browser.window
-import com.github.kotlin_everywhere.JavaScript.Promise
 
 enum class Method {
     GET, POST
@@ -55,14 +55,14 @@ class EndpointWithParam<R, P : Any>(remote: Remote, url: String, method: Method)
 
 abstract class Remote {
     lateinit var baseUri: String
+}
 
-    fun <T> get(url: String): Endpoint<T> {
-        return Endpoint(this, url, Method.GET)
-    }
+fun <T> Remote.get(url: String): Endpoint<T> {
+    return Endpoint(this, url, Method.GET)
+}
 
-    fun <T> post(url: String): Endpoint<T> {
-        return Endpoint(this, url, Method.POST)
-    }
+fun <T> Remote.post(url: String): Endpoint<T> {
+    return Endpoint(this, url, Method.POST)
 }
 
 fun <T> jsObject(body: (T.() -> Unit)? = null): T {
